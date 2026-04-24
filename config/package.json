@@ -1,0 +1,53 @@
+{
+
+    "appInfo": {
+        "name": "recordBehavior",
+        "version": "0.1.0",
+        "description": "GUI for recording behavior data in mice",
+        "author": "Luis M. Franco",
+        "authorEmail": "luisfran@uoregon.edu",
+        "license": "MIT",
+        "repository": {
+            "type": "git",
+            "url": "https://github.com/luismfranco/recordBehavior"
+        },
+        "dependencies": {
+            "python": "3.12.7",
+            "pillow": "11.3.0",
+            "opencv-python": "4.13.0.92",
+            "pyserial": "3.5",
+            "numpy": "2.2.6",
+            "imagingcontrol4": "1.4.0.3240"
+        }
+     },
+     
+     "sessionInfo": {
+         "rigID": "mini2p",
+         "animalID": "G6CK00XLT",
+         "blockID": "1",
+         "rootDir": "T:\\",
+         "user": "JohnDoe"
+     },
+     
+     "topDownCamera": {
+         "cameraID": "0",
+         "recordingDuration": "1860",
+         "frameRate": "100",
+         "frameWidth": "720",
+         "frameHeight": "540"
+     },
+     
+     "eyeCamera": {
+         "cameraID": "1",
+         "recordingDuration": "1860",
+         "frameRate": "30",
+         "frameWidth": "720",
+         "frameHeight": "576"
+     },
+     
+     "IMU": {
+         "comID": "10",
+         "recordingDuration": "1860"
+     }
+     
+}
