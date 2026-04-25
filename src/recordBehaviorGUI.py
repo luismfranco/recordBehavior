@@ -440,17 +440,18 @@ class recordBehaviorGUI:
             self.defaultPath()
             self.defaultSessionInfo()
             Path(self.pathForSavingData).mkdir(parents = True, exist_ok = True)
-            print(" ")
-            print(f"WARNING: Path changed to {self.pathForSavingData}")
-            print("Make sure there is enough space on disk for your data.")
-            print(" ")
+            
             
     def defaultPath(self):
         
         try:
-            self.pathForSavingData = "C:\\Users\\" + self.windowsUserName + "\\Documents\\recordBehavior\\Data\\" + self.currentDate + "\\"
+            self.pathForSavingData = self.rootDir + self.userID + "\\" + self.animalID + "_" + self.currentDate + "_" + self.blockID + "\\"
         except:
-            print("WARNING: Default path is not valid. Make sure the path is properly set in the GUI before starting any recordings.")
+            self.pathForSavingData = "C:\\Users\\" + self.windowsUserName + "\\Documents\\recordBehavior\\Data\\" + self.currentDate + "\\"
+            print(" ")
+            print(f"WARNING: Path changed to {self.pathForSavingData}")
+            print("Make sure there is enough space on disk for your data.")
+            print(" ")
     
     def defaultSessionInfo(self):
         
