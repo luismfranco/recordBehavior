@@ -65,8 +65,10 @@ You could also create a batch file. Example:
 # How to Run an Experiment
 
 In this app, you can choose to see a preview for each device independently, such as the live feed from the cameras or the serial output from the IMU, and also record data from each device independently:
-<video src="https://github.com/user-attachments/assets/c5396dac-6fb6-4471-85b1-7913d6aa7dc7" autoplay muted playsinline loop></video>
+
+![eachDeviceIndependently](https://github.com/user-attachments/assets/1b412cb3-3d84-45b1-ad1f-b0c46f939bec)
+
 <br>
 Alternatively, you can trigger all of the devices together, either to see a preview or to record data from all devices simultaneously:
-<video src="https://github.com/user-attachments/assets/39d31515-e809-4bf1-9fb2-ec6599655637" autoplay muted playsinline loop></video>
 
+![allDevicesTogether](https://github.com/user-attachments/assets/e688633c-cbdd-479c-a6c4-8961caac48f9)
