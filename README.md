@@ -37,7 +37,7 @@ If everything went well, you should be able to run the GUI:
 <img width="675" height="525" src="assets/behaviorGUI.png">
 </p>
 
-This app was built to control three components: 1) a Top Down Camera, used for recording mouse traversals during an experiment, 2) an Eye Camera, for recording pupil movements, and 3) an Inertial Measurement Unit, or IMU, that measures head movements. Therefore, this app requires connection to external components, such as 1) an [Imaging Source camera](https://www.theimagingsource.com/en-us/product/industrial/37u/), 2) a [Mini Analog Camera](https://www.aliexpress.us/item/2251832844016467.html?spm=a2g0o.productlist.main.3.319b9VGy9VGy6F&algo_pvid=1a689f69-4a2c-4fad-bfcc-4226597ac304&algo_exp_id=1a689f69-4a2c-4fad-bfcc-4226597ac304-2&pdp_ext_f=%7B%22order%22%3A%22155%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%2137.99%2137.49%21%21%2137.99%2137.49%21%4021030a6217770712820173164e4a30%2112000032376155040%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A32190305%3Bm03_new_user%3A-29895%3BpisId%3A5000000204886261&curPageLogUid=U0a4oN5HIhEF&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A33030331219%7C_p_origin_prod%3A) connected to a [Capture Device](https://www.startech.com/en-us/audio-video-products/usb3hdcap), and 3) a [Teensy 4.0](https://www.pjrc.com/store/teensy40.html) board in order to work.
+This app was built to control three components: 1) a Top Down Camera, used for recording mouse traversals during an experiment, 2) an Eye Camera, for recording pupil movements, and 3) an Inertial Measurement Unit, or IMU, that measures head movements. Therefore, this app requires connection to external components, such as 1) an [Imaging Source Camera](https://www.theimagingsource.com/en-us/product/industrial/37u/), 2) a [Mini Analog Camera](https://www.aliexpress.us/item/2251832844016467.html?spm=a2g0o.productlist.main.3.319b9VGy9VGy6F&algo_pvid=1a689f69-4a2c-4fad-bfcc-4226597ac304&algo_exp_id=1a689f69-4a2c-4fad-bfcc-4226597ac304-2&pdp_ext_f=%7B%22order%22%3A%22155%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%2137.99%2137.49%21%21%2137.99%2137.49%21%4021030a6217770712820173164e4a30%2112000032376155040%21sea%21US%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A32190305%3Bm03_new_user%3A-29895%3BpisId%3A5000000204886261&curPageLogUid=U0a4oN5HIhEF&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A33030331219%7C_p_origin_prod%3A) connected to a [Capture Device](https://www.startech.com/en-us/audio-video-products/usb3hdcap), and 3) a [Teensy 4.0](https://www.pjrc.com/store/teensy40.html) board in order to work.
 
 # Configuration Settings
 
@@ -48,7 +48,9 @@ Before running your first experiment, make sure you:
 Also, ensure camera IDs and serial ports are properly [configured](config/package.json):
 1. Under ``topDownCamera``, select the correct ``cameraID`` for connecting to the Imaging Source camera.
 2. Under ``eyeCamera``, select the correct ``cameraID`` for connecting to the StarTech USB 3.0 HD Video Capture Device.
-3. Under ``IMU``, select the correct ``comID`` for communication between the computer and Teensy (e.g. ***3***).
+3. Under ``IMU``, select the correct ``comID`` for communication between the computer and Teensy (e.g. ***10***).
+
+Both cameras have different properties for image size (width and height) and frame rates that you can input in this app. To know more about the properties of your cameras you could use [IC Capture](https://www.theimagingsource.com/en-us/support/download/iccapture-4.1.0.720/) for the Top Down Camera, and [OBS Studio](https://obsproject.com/) or [Stream Catcher Pro](https://www.mediafire.com/folder/p0mknosccpekn/StreamCatcherPro) for the Eye Camera. Also, for the Eye Camera, you can change some properties in OBS Studio or Stream Catcher Pro (e.g. Video Input or Saturation) and they will be stored to be used with this app.
 
 # How to Run this App
 
