@@ -61,3 +61,11 @@ You could also create a batch file. Example:
 ``call activate recordBehavior``  
 ``cd C:\Users\Niell Lab\Documents\recordBehavior\Application\``  
 ``python recordBehavior.py``  
+
+# How to Run an Experiment
+
+In this app, you can choose to see a preview for each device independently, such as the live feed from the cameras or the serial output from the IMU, and also record data from each device independently:
+https://github.com/user-attachments/assets/3eae88eb-59d0-4bd3-a1aa-3b656053a862
+
+Alternatively, you can trigger all of the devices together, either to see a preview or to record data from all devices simultaneously:
+https://github.com/user-attachments/assets/29d9639d-54ae-4646-bb5f-629324a58320
