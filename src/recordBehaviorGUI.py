@@ -846,9 +846,19 @@ class topDownCamera:
             self.blockIDchanged = False
         else:
             while os.path.isfile(self.videoFileName) is True:
-                blockID = self.videoFileName[-1]
-                blockID = int(blockID)
+                
+                
+                # blockID = self.videoFileName[-1]
+                # blockID = int(blockID)
+                # blockID += 1
+                # self.blockID = str(blockID)
+                
+                
+                self.blockID = Path(self.videoFileName).stem[-1]
+                self.blockID = int(self.blockID)
                 self.blockID += 1
+                
+                
                 self.videoFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "topDownCamera" + "_" + str(self.blockID) + ".mp4"
                 self.timeStampsFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "topDownCameraTimeStamps" + "_" + str(self.blockID) + ".txt"
                 if not os.path.isfile(self.videoFileName):
@@ -1181,9 +1191,18 @@ class eyeCamera:
             self.blockIDchanged = False
         else:
             while os.path.isfile(self.videoFileName) is True:
-                blockID = self.videoFileName[-1]
-                blockID = int(blockID)
+                
+                # blockID = self.videoFileName[-1]
+                # blockID = int(blockID)
+                # blockID += 1
+                # self.blockID = str(blockID)
+                
+                
+                self.blockID = Path(self.videoFileName).stem[-1]
+                self.blockID = int(self.blockID)
                 self.blockID += 1
+                
+                
                 self.videoFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "eyeCamera" + "_" + str(self.blockID) + ".mp4"
                 self.timeStampsFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "eyeCameraTimeStamps" + "_" + str(self.blockID) + ".txt"
                 if not os.path.isfile(self.videoFileName):
