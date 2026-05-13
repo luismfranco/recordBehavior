@@ -1735,7 +1735,7 @@ class IMU:
             self.blockIDchanged = False
         
         # Close IMU connection too if recording is finished
-        if time.time() > self.taskStartTime + self.recordingDuration:
+        if time.time() > self.startTime + self.recordingDuration:
             self.closeIMUconnection()
     
     
