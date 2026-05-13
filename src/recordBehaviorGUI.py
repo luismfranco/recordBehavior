@@ -958,7 +958,7 @@ class topDownCamera:
                 timeOffset(self.recordBehavior, self)
                 grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
                 grabTimeOffset.start()
-
+            
             # Update button
             self.recordBehavior.topDownCamRecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
             self.recordBehavior.topDownCamRecordButton.bind('<Enter>', lambda e: self.recordBehavior.topDownCamRecordButton.config(fg = 'Black', bg ='#DC5B5B'))
@@ -1771,10 +1771,10 @@ Time Offset
         
 class timeOffset:
     
-    def __init__(self, recordBehavior, masterDevice):
+    def __init__(self, masterDevice):
         
         # GUI instance
-        self.recordBehavior = recordBehavior
+        self.recordBehavior = masterDevice.recordBehavior
         
         # Initialize the client
         self.recordBehavior.timeOffsetOn = True
