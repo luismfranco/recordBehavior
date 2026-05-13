@@ -958,7 +958,8 @@ class topDownCamera:
                 self.timeOffset = timeOffset(self)
                 grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                 grabTimeOffset.start()
-            
+                self.recordBehavior.timeOffsetOn = True
+                
             # Update button
             self.recordBehavior.topDownCamRecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
             self.recordBehavior.topDownCamRecordButton.bind('<Enter>', lambda e: self.recordBehavior.topDownCamRecordButton.config(fg = 'Black', bg ='#DC5B5B'))
@@ -971,7 +972,12 @@ class topDownCamera:
         elif self.isRecordingOn is True:
             
             self.stopRecording()
-            
+            try:
+                self.timeOffset.stopRecording = True
+                self.recordBehavior.timeOffsetOn = False
+            except:
+                ...
+                
         elif self.isPreviewOn is True:
             print("Preview mode is on... Please close preview mode before starting a recording.")
         
@@ -1317,6 +1323,7 @@ class eyeCamera:
                     self.timeOffset = timeOffset(self)
                     grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                     grabTimeOffset.start()
+                    self.recordBehavior.timeOffsetOn = True
                     
                 # Update button
                 self.recordBehavior.eyeCamRecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
@@ -1330,7 +1337,12 @@ class eyeCamera:
         elif self.isRecordingOn is True:
             
             self.stopRecording()
-            
+            try:
+                self.timeOffset.stopRecording = True
+                self.recordBehavior.timeOffsetOn = False
+            except:
+                ...
+                
         elif self.isPreviewOn is True:
             print("Preview mode is on... Please close preview mode before starting a recording.")
         
@@ -1656,6 +1668,7 @@ class IMU:
                 self.timeOffset = timeOffset(self)
                 grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                 grabTimeOffset.start()
+                self.recordBehavior.timeOffsetOn = True
                 
             # Update button
             self.recordBehavior.IMUrecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
@@ -1669,7 +1682,12 @@ class IMU:
         elif self.IMUIsOn is True and self.isRecordingOn is True:
             
             self.stopRecording = True
-            
+            try:
+                self.timeOffset.stopRecording = True
+                self.recordBehavior.timeOffsetOn = False
+            except:
+                ...
+                
         elif self.IMUIsOn is False and self.isRecordingOn is False:
             
             # Start IMU connection
@@ -1773,11 +1791,7 @@ class timeOffset:
     
     def __init__(self, masterDevice):
         
-        # GUI instance
-        self.recordBehavior = masterDevice.recordBehavior
-        
         # Initialize the client
-        self.recordBehavior.timeOffsetOn = True
         self.timeServer = ntplib.NTPClient()
         
         # Settings
@@ -1791,6 +1805,7 @@ class timeOffset:
         # Prepare file for recording
         self.checkFileName()
         self.offsetDataFile = open(self.offsetDataFileName, 'w')
+        self.stopRecording = False
         
     def checkFileName(self):
         
@@ -1830,6 +1845,10 @@ class timeOffset:
             if time.time() > self.startTime + self.recordingDuration:
                 break
             
+            # Check for manual stop
+            if self.stopRecording is True:
+                break
+            
         # Stop time offset acquisition
         self.stopTimeOffset()
             
@@ -1837,7 +1856,7 @@ class timeOffset:
         
         # Close text file
         self.offsetDataFile.close()
-        self.recordBehavior.timeOffsetOn = False
+        self.stopRecording = False
     
         # Warning for changing block ID
         if self.blockIDchanged is True:
