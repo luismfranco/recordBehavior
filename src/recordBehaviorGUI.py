@@ -1821,7 +1821,7 @@ class timeOffset:
                 
             # Write unix timeStamp and time offset
             timeStamp = time.time()
-            self.offsetDataFile.write(str(timeStamp) + ", " + timeStampOffest + '\n')
+            self.offsetDataFile.write(str(timeStamp) + ", " + str(timeStampOffest) + '\n')
     
             # Check for timeout
             if time.time() > self.startTime + self.recordingDuration:
