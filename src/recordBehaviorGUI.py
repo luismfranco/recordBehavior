@@ -10,6 +10,7 @@ from tkinter import messagebox
 from threading import Thread
 from PIL import ImageTk, Image
 import os
+import ntplib
 from datetime import datetime
 from pathlib import Path
 
@@ -391,6 +392,14 @@ class recordBehaviorGUI:
         self.IMUrecordButton.grid(row = 0, column = 1, padx = 10, pady = 10)
         self.IMUrecordButton.bind('<Enter>', lambda e: self.IMUrecordButton.config(fg = 'Black', bg ='#DC5B5B'))
         self.IMUrecordButton.bind('<Leave>', lambda e: self.IMUrecordButton.config(fg = 'Black', bg ='SystemButtonFace'))
+        
+        
+        """ 
+        Time Offset
+
+        """
+        
+        self.timeOffsetOn = False
         
         
         """
@@ -952,6 +961,13 @@ class topDownCamera:
             cameraFeed.start()
             printCamSettings = Thread(target = self.printCamSettings)
             printCamSettings.start()
+            self.startTime = time.time()
+            
+            # Time offset
+            if self.recordBehavior.timeOffsetOn is False:
+                timeOffset(self.startTime, self.recordingDuration)
+                grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
+                grabTimeOffset.start()
 
             # Update button
             self.recordBehavior.topDownCamRecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
@@ -962,7 +978,7 @@ class topDownCamera:
             # Check on 'Record All' button
             self.recordBehavior.checkRecordButtonState()
             
-        elif self.isRecordingOn is True:
+        elif self.isRecordingOn is True: # or time.time() > self.startTime + self.recordingDuration:
             
             self.stopRecording()
             
@@ -1033,6 +1049,10 @@ class topDownCamera:
                     
                     # Could not grab frame
                     ...
+                    
+                # Check for timeout
+                if time.time() > self.startTime + self.recordingDuration:
+                    break
                 
         except ic4.IC4Exception as e:
             print(f"Error during acquisition: {e}")
@@ -1057,6 +1077,9 @@ class topDownCamera:
             # Press Esc to stop preview mode
             if cv2.waitKey(1) & 0xFF == 27:
                 self.stopPreview()
+                break
+            # Check for timeout
+            if time.time() > self.startTime + self.recordingDuration:
                 break
                 
     def stopCamera(self):
@@ -1304,7 +1327,14 @@ class eyeCamera:
                 cameraFeed.start()
                 printCamSettings = Thread(target = self.printCamSettings)
                 printCamSettings.start()
-    
+                self.startTime = time.time()
+                
+                # Time offset
+                if self.recordBehavior.timeOffsetOn is False:
+                    timeOffset(self.startTime, self.recordingDuration)
+                    grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
+                    grabTimeOffset.start()
+                    
                 # Update button
                 self.recordBehavior.eyeCamRecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
                 self.recordBehavior.eyeCamRecordButton.bind('<Enter>', lambda e: self.recordBehavior.eyeCamRecordButton.config(fg = 'Black', bg ='#DC5B5B'))
@@ -1314,7 +1344,7 @@ class eyeCamera:
                 # Check on 'Record All' button
                 self.recordBehavior.checkRecordButtonState()
                 
-        elif self.isRecordingOn is True:
+        elif self.isRecordingOn is True: # or time.time() > self.startTime + self.recordingDuration:
             
             self.stopRecording()
             
@@ -1382,6 +1412,10 @@ class eyeCamera:
                     # Could not grab frame
                     ...
                     
+                # Check for timeout
+                if time.time() > self.startTime + self.recordingDuration:
+                    break
+                    
         except KeyboardInterrupt:
             # Press Ctrl+C to stop recording mode
             if self.isRecordingOn is True:
@@ -1402,6 +1436,9 @@ class eyeCamera:
             # Press Esc to stop preview mode
             if cv2.waitKey(1) & 0xFF == 27:
                 self.stopPreview()
+                break
+            # Check for timeout
+            if time.time() > self.startTime + self.recordingDuration:
                 break
                 
     def stopCamera(self):
@@ -1504,10 +1541,10 @@ class IMU:
             # Serial monitor
             self.serialMonitor = tk.Tk()
             self.serialMonitor.wm_title("Serial Monitor")
-            self.serialMonitor.geometry('%dx%d+%d+%d' % (500, 800, 50, 50))
+            self.serialMonitor.geometry('%dx%d+%d+%d' % (600, 800, 50, 50))
             scrollBar = tk.Scrollbar(self.serialMonitor)
             scrollBar.pack(side = tk.RIGHT, fill = tk.Y)
-            self.textBox = tk.Text(self.serialMonitor, width = 62, height = 48, takefocus = 0, bg = "black", fg = "white")
+            self.textBox = tk.Text(self.serialMonitor, width = 70, height = 48, takefocus = 0, bg = "black", fg = "white")
             self.textBox.pack()
             self.textBox.config(yscrollcommand = scrollBar.set)
             scrollBar.config(command = self.textBox.yview)
@@ -1625,10 +1662,16 @@ class IMU:
             
             # Thread to handle reading and writing IMU data
             self.isRecordingOn = True
-            self.taskStartTime = time.time()
             readIMU = Thread(target = self.readIMU)
             readIMU.start()
+            self.startTime = time.time()
             
+            # Time offset
+            if self.recordBehavior.timeOffsetOn is False:
+                timeOffset(self.startTime, self.recordingDuration)
+                grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
+                grabTimeOffset.start()
+                
             # Update button
             self.recordBehavior.IMUrecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
             self.recordBehavior.IMUrecordButton.bind('<Enter>', lambda e: self.recordBehavior.IMUrecordButton.config(fg = 'Black', bg ='#DC5B5B'))
@@ -1638,7 +1681,7 @@ class IMU:
             # Check on 'Record All' button
             self.recordBehavior.checkRecordButtonState()
             
-        elif self.IMUIsOn is True and self.isRecordingOn is True:
+        elif self.IMUIsOn is True and self.isRecordingOn is True: #(self.isRecordingOn is True or time.time() > self.startTime + self.recordingDuration):
             
             self.stopRecording = True
             
@@ -1668,7 +1711,7 @@ class IMU:
                     self.IMUdataFile.write(str(timeStamp) + ", " + line + '\n')
             
             # Check for timeout
-            if time.time() > self.taskStartTime + self.recordingDuration:
+            if time.time() > self.startTime + self.recordingDuration:
                 break
             
             # Check for manual stop
@@ -1736,6 +1779,70 @@ class IMU:
         self.recordBehavior.IMUinitializeButton.update_idletasks()
     
     
+""" 
+Time Offset
+
+"""
+        
+class timeOffset:
+    
+    def __init__(self, recordBehavior, startTime, recordingDuration):
+        
+        # GUI instance
+        self.recordBehavior = recordBehavior
+        
+        # Initialize the client
+        self.timeServer = ntplib.NTPClient()
+        
+        # Time settings
+        self.startTime = startTime
+        self.recordingDuration = recordingDuration
+        
+        # Prepare file for recording
+        self.checkFileName()
+        self.offsetDataFile = open(self.offsetDataFileName, 'w')
+        self.recordBehavior.timeOffsetOn = True
+        
+    def checkFileName(self):
+        
+        # Time offset data file
+        self.offsetDataFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "timeOffset" + "_" + str(self.blockID) + ".txt"
+
+        # Check for existing files
+        if not os.path.isfile(self.offsetDataFileName):
+            self.blockIDchanged = False
+        else:
+            while os.path.isfile(self.offsetDataFileName) is True:
+                self.blockID = Path(self.offsetDataFileName).stem[-1]
+                self.blockID = int(self.blockID)
+                self.blockID += 1
+                self.offsetDataFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "timeOffset" + "_" + str(self.blockID) + ".txt"
+                if not os.path.isfile(self.offsetDataFileName):
+                    self.blockIDchanged = True
+                    break
+    
+    def grabTimeStamp(self):
+    
+        while True:
+            
+            try:
+                timeStampOffest = self.timeServer.request('pool.ntp.org').offset
+            except:
+                timeStampOffest = None
+                
+            # Write unix timeStamp and time offset
+            timeStamp = time.time()
+            self.offsetDataFile.write(str(timeStamp) + ", " + timeStampOffest + '\n')
+    
+            # Check for timeout
+            if time.time() > self.startTime + self.recordingDuration:
+                break
+            
+            # Wait for next request
+            time.pause(2)
+            
+        self.recordBehavior.timeOffsetOn = False
+    
 """
 Main Block
 
@@ -1746,4 +1853,5 @@ if __name__ == "__main__":
     topDownCamera = topDownCamera.__init__()
     eyeCamera = eyeCamera.__init__()
     IMU = IMU.__init__()
+    timeOffset = timeOffset.__init__()
     
