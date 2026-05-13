@@ -1828,7 +1828,7 @@ class timeOffset:
                 break
             
             # Wait for next request
-            time.pause(2)
+            time.sleep(2)
             
         self.recordBehavior.timeOffsetOn = False
     
