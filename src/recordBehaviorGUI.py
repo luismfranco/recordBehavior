@@ -956,7 +956,7 @@ class topDownCamera:
             # Time offset
             if self.recordBehavior.timeOffsetOn is False:
                 self.timeOffset = timeOffset(self)
-                grabTimeOffset = Thread(target = self.timeOffset.grabTimeStamp)
+                grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                 grabTimeOffset.start()
             
             # Update button
@@ -1315,7 +1315,7 @@ class eyeCamera:
                 # Time offset
                 if self.recordBehavior.timeOffsetOn is False:
                     self.timeOffset = timeOffset(self)
-                    grabTimeOffset = Thread(target = self.timeOffset.grabTimeStamp)
+                    grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                     grabTimeOffset.start()
                     
                 # Update button
@@ -1654,7 +1654,7 @@ class IMU:
             # Time offset
             if self.recordBehavior.timeOffsetOn is False:
                 self.timeOffset = timeOffset(self)
-                grabTimeOffset = Thread(target = self.timeOffset.grabTimeStamp)
+                grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                 grabTimeOffset.start()
                 
             # Update button
@@ -1810,7 +1810,7 @@ class timeOffset:
                     self.blockIDchanged = True
                     break
     
-    def grabTimeStamp(self):
+    def grabTimeOffset(self):
     
         while True:
             
@@ -1823,13 +1823,20 @@ class timeOffset:
             timeStamp = time.time()
             self.offsetDataFile.write(str(timeStamp) + ", " + str(timeStampOffest) + '\n')
     
+            # Wait for next request
+            time.sleep(2)
+            
             # Check for timeout
             if time.time() > self.startTime + self.recordingDuration:
                 break
             
-            # Wait for next request
-            time.sleep(2)
+        # Stop time offset acquisition
+        self.stopTimeOffset()
             
+    def stopTimeOffset(self):
+        
+        # Close text file
+        self.offsetDataFile.close()
         self.recordBehavior.timeOffsetOn = False
     
         # Warning for changing block ID
@@ -1853,4 +1860,3 @@ if __name__ == "__main__":
     eyeCamera = eyeCamera.__init__()
     IMU = IMU.__init__()
     timeOffset = timeOffset.__init__()
-    
