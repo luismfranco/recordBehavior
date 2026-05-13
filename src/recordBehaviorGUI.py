@@ -955,8 +955,8 @@ class topDownCamera:
             
             # Time offset
             if self.recordBehavior.timeOffsetOn is False:
-                timeOffset(self)
-                grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
+                self.timeOffset = timeOffset(self)
+                grabTimeOffset = Thread(target = self.timeOffset.grabTimeStamp)
                 grabTimeOffset.start()
             
             # Update button
@@ -1314,8 +1314,8 @@ class eyeCamera:
                 
                 # Time offset
                 if self.recordBehavior.timeOffsetOn is False:
-                    timeOffset(self)
-                    grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
+                    self.timeOffset = timeOffset(self)
+                    grabTimeOffset = Thread(target = self.timeOffset.grabTimeStamp)
                     grabTimeOffset.start()
                     
                 # Update button
@@ -1653,8 +1653,8 @@ class IMU:
             
             # Time offset
             if self.recordBehavior.timeOffsetOn is False:
-                timeOffset(self)
-                grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
+                self.timeOffset = timeOffset(self)
+                grabTimeOffset = Thread(target = self.timeOffset.grabTimeStamp)
                 grabTimeOffset.start()
                 
             # Update button
