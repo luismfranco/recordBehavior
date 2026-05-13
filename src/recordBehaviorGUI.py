@@ -955,7 +955,7 @@ class topDownCamera:
             
             # Time offset
             if self.recordBehavior.timeOffsetOn is False:
-                timeOffset(self.recordBehavior, self)
+                timeOffset(self)
                 grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
                 grabTimeOffset.start()
             
@@ -1314,7 +1314,7 @@ class eyeCamera:
                 
                 # Time offset
                 if self.recordBehavior.timeOffsetOn is False:
-                    timeOffset(self.recordBehavior, self)
+                    timeOffset(self)
                     grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
                     grabTimeOffset.start()
                     
@@ -1653,7 +1653,7 @@ class IMU:
             
             # Time offset
             if self.recordBehavior.timeOffsetOn is False:
-                timeOffset(self.recordBehavior, self)
+                timeOffset(self)
                 grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
                 grabTimeOffset.start()
                 
