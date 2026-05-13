@@ -955,7 +955,7 @@ class topDownCamera:
             
             # Time offset
             if self.recordBehavior.timeOffsetOn is False:
-                timeOffset(self.startTime, self.recordingDuration)
+                timeOffset(self.recordBehavior, self)
                 grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
                 grabTimeOffset.start()
 
@@ -1314,7 +1314,7 @@ class eyeCamera:
                 
                 # Time offset
                 if self.recordBehavior.timeOffsetOn is False:
-                    timeOffset(self.startTime, self.recordingDuration)
+                    timeOffset(self.recordBehavior, self)
                     grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
                     grabTimeOffset.start()
                     
@@ -1653,7 +1653,7 @@ class IMU:
             
             # Time offset
             if self.recordBehavior.timeOffsetOn is False:
-                timeOffset(self.startTime, self.recordingDuration)
+                timeOffset(self.recordBehavior, self)
                 grabTimeOffset = Thread(target = timeOffset.grabTimeStamp)
                 grabTimeOffset.start()
                 
@@ -1771,22 +1771,26 @@ Time Offset
         
 class timeOffset:
     
-    def __init__(self, recordBehavior, startTime, recordingDuration):
+    def __init__(self, recordBehavior, masterDevice):
         
         # GUI instance
         self.recordBehavior = recordBehavior
         
         # Initialize the client
+        self.recordBehavior.timeOffsetOn = True
         self.timeServer = ntplib.NTPClient()
         
-        # Time settings
-        self.startTime = startTime
-        self.recordingDuration = recordingDuration
+        # Settings
+        self.startTime = masterDevice.startTime
+        self.recordingDuration = masterDevice.recordingDuration
+        self.pathForSavingData = masterDevice.pathForSavingData
+        self.animalID = masterDevice.animalID
+        self.currentDate = masterDevice.currentDate
+        self.blockID = masterDevice.blockID
         
         # Prepare file for recording
         self.checkFileName()
         self.offsetDataFile = open(self.offsetDataFileName, 'w')
-        self.recordBehavior.timeOffsetOn = True
         
     def checkFileName(self):
         
@@ -1828,6 +1832,16 @@ class timeOffset:
             
         self.recordBehavior.timeOffsetOn = False
     
+        # Warning for changing block ID
+        if self.blockIDchanged is True:
+            messagebox.showwarning("Data Saved", "Time offset data have been saved at " + self.pathForSavingData +
+                                   "\n " +
+                                   "\nHowever, the block number was changed to " + str(self.blockID) + " to avoid overwriting an existing file." +
+                                   "\n"
+                                   "\nIf other data was acquired, make sure block numbers match.")
+            self.blockIDchanged = False
+            
+            
 """
 Main Block
 
