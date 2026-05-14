@@ -16,6 +16,7 @@
             "pillow": "11.3.0",
             "opencv-python": "4.13.0.92",
             "pyserial": "3.5",
+            "ntplib": "0.4.0",
             "numpy": "2.2.6",
             "imagingcontrol4": "1.4.0.3240"
         }
@@ -25,7 +26,7 @@
          "rigID": "mini2p",
          "animalID": "G6CK00XLT",
          "blockID": "1",
-         "rootDir": "T:\\",
+         "rootDir": "F:\\",
          "user": "JohnDoe"
      },
      
@@ -46,7 +47,7 @@
      },
      
      "IMU": {
-         "comID": "10",
+         "comID": "6",
          "recordingDuration": "1860"
      }
      
