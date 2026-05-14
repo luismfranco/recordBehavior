@@ -1795,6 +1795,7 @@ class timeOffset:
         self.timeServer = ntplib.NTPClient()
         
         # Settings
+        self.requestDelay = 5
         self.startTime = masterDevice.startTime
         self.recordingDuration = masterDevice.recordingDuration
         self.pathForSavingData = masterDevice.pathForSavingData
@@ -1839,7 +1840,7 @@ class timeOffset:
             self.offsetDataFile.write(str(timeStamp) + ", " + str(timeStampOffest) + '\n')
     
             # Wait for next request
-            time.sleep(2)
+            time.sleep(self.requestDelay)
             
             # Check for timeout
             if time.time() > self.startTime + self.recordingDuration:
