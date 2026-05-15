@@ -431,12 +431,10 @@ class recordBehaviorGUI:
     
     """
        
-    def makePath(self):
+    def makePath(self, *args):
         
         # Read current session info
-        self.updatePath()
-        
-        print(self.pathForSavingData)
+        self.updatePath(*args)
         
         # Prepare directory to save data
         try:
@@ -507,7 +505,11 @@ class recordBehaviorGUI:
         self.blockID = str(self.blockVar.get() or self.blockIDifEmpty)
         self.updateInfoSessionForEachTask()
         
-        # Automatically ppdate path if not custom
+        # Update block ID if needed
+        if args[0] is True:
+            self.blockID = str(args[1])
+        
+        # Automatically update path if not custom
         useCustomPath = bool(self.useCustomPath.get())
         if useCustomPath is False:
             path = self.rootDir + self.userID + "\\" + self.animalID + "_" + self.currentDate + "_" + self.blockID + "\\"
@@ -859,7 +861,11 @@ class topDownCamera:
                 if not os.path.isfile(self.videoFileName):
                     self.blockIDchanged = True
                     break
-                
+        
+        # New folder if blockID was changed
+        if self.blockIDchanged is True:
+            self.recordBehavior.makePath(True, self.blockID)
+            
     def prepareFiles(self):
         
         # Define the codec and create VideoWriter object
@@ -1229,6 +1235,10 @@ class eyeCamera:
                 if not os.path.isfile(self.videoFileName):
                     self.blockIDchanged = True
                     break
+                
+        # New folder if blockID was changed
+        if self.blockIDchanged is True:
+            self.recordBehavior.makePath(True, self.blockID)
         
     def prepareFiles(self):
         
@@ -1667,6 +1677,10 @@ class IMU:
                 if not os.path.isfile(self.IMUdataFileName):
                     self.blockIDchanged = True
                     break
+        
+        # New folder if blockID was changed
+        if self.blockIDchanged is True:
+            self.recordBehavior.makePath(True, self.blockID)
     
     def recordIMUdata(self):
         
