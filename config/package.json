@@ -34,8 +34,8 @@
          "cameraID": "0",
          "recordingDuration": "1860",
          "frameRate": "100",
-         "frameWidth": "720",
-         "frameHeight": "540"
+         "frameWidth": "1920",
+         "frameHeight": "1080"
      },
      
      "eyeCamera": {
