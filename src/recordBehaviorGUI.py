@@ -10,7 +10,6 @@ from tkinter import messagebox
 from threading import Thread
 from PIL import ImageTk, Image
 import os
-import ntplib
 from datetime import datetime
 from pathlib import Path
 
@@ -21,6 +20,10 @@ import cv2
 import time
 import numpy as np
 import serial
+
+# For time synchronization
+import ntplib
+timeOffsetOn = False
 
 
 """
@@ -394,14 +397,6 @@ class recordBehaviorGUI:
         self.IMUrecordButton.bind('<Leave>', lambda e: self.IMUrecordButton.config(fg = 'Black', bg ='SystemButtonFace'))
         
         
-        """ 
-        Time Offset
-
-        """
-        
-        self.timeOffsetOn = False
-        
-        
         """
         GUI Buttons
         
@@ -429,6 +424,7 @@ class recordBehaviorGUI:
         self.closeButton.bind('<Enter>', lambda e: self.closeButton.config(fg='Black', bg='#AFAFAA'))
         self.closeButton.bind('<Leave>', lambda e: self.closeButton.config(fg='Black', bg='SystemButtonFace'))
         self.mainWindow.protocol('WM_DELETE_WINDOW', self.closeMainWindow)
+        
         
     """ 
     GUI Functions
@@ -931,6 +927,8 @@ class topDownCamera:
     
     def recordVideo(self):
         
+        global timeOffsetOn
+        
         if self.isRecordingOn is False and self.isPreviewOn is False:
             
             # Initialize camera
@@ -954,11 +952,11 @@ class topDownCamera:
             self.startTime = time.time()
             
             # Time offset
-            if self.recordBehavior.timeOffsetOn is False:
+            if timeOffsetOn is False:
                 self.timeOffset = timeOffset(self)
                 grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                 grabTimeOffset.start()
-                self.recordBehavior.timeOffsetOn = True
+                timeOffsetOn = True
                 
             # Update button
             self.recordBehavior.topDownCamRecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
@@ -972,11 +970,13 @@ class topDownCamera:
         elif self.isRecordingOn is True:
             
             self.stopRecording()
-            try:
-                self.timeOffset.stopRecording = True
-                self.recordBehavior.timeOffsetOn = False
-            except:
-                ...
+            self.timeOffset.stopRecording = True
+            timeOffsetOn = False
+            
+            # try:
+                
+            # except:
+            #     ...
                 
         elif self.isPreviewOn is True:
             print("Preview mode is on... Please close preview mode before starting a recording.")
@@ -1009,6 +1009,8 @@ class topDownCamera:
                                    "\nIf other data was acquired, make sure block numbers match.")
 
     def grabFrame(self):
+        
+        global timeOffsetOn
         
         try:
             
@@ -1051,6 +1053,17 @@ class topDownCamera:
                     if time.time() > self.startTime + self.recordingDuration:
                         break
                 
+            # Stop recording after timeout
+            if self.isRecordingOn is True:
+                self.stopRecording()
+                self.timeOffset.stopRecording = True
+                timeOffsetOn = False
+                
+                # try:
+                    
+                # except:
+                #     ...
+                    
         except ic4.IC4Exception as e:
             print(f"Error during acquisition: {e}")
             
@@ -1294,6 +1307,8 @@ class eyeCamera:
     
     def recordVideo(self):
         
+        global timeOffsetOn
+        
         if self.isRecordingOn is False and self.isPreviewOn is False:
             
             # Initialize camera
@@ -1319,11 +1334,11 @@ class eyeCamera:
                 self.startTime = time.time()
                 
                 # Time offset
-                if self.recordBehavior.timeOffsetOn is False:
+                if timeOffsetOn is False:
                     self.timeOffset = timeOffset(self)
                     grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                     grabTimeOffset.start()
-                    self.recordBehavior.timeOffsetOn = True
+                    timeOffsetOn = True
                     
                 # Update button
                 self.recordBehavior.eyeCamRecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
@@ -1337,11 +1352,13 @@ class eyeCamera:
         elif self.isRecordingOn is True:
             
             self.stopRecording()
-            try:
-                self.timeOffset.stopRecording = True
-                self.recordBehavior.timeOffsetOn = False
-            except:
-                ...
+            self.timeOffset.stopRecording = True
+            timeOffsetOn = False
+            
+            # try:
+                
+            # except:
+            #     ...
                 
         elif self.isPreviewOn is True:
             print("Preview mode is on... Please close preview mode before starting a recording.")
@@ -1375,6 +1392,8 @@ class eyeCamera:
 
     def grabFrame(self):
         
+        global timeOffsetOn
+        
         try:
             
             if self.isPreviewOn is True:
@@ -1406,11 +1425,22 @@ class eyeCamera:
                     
                     # Could not grab frame
                     ...
-                    
+                
                 # Check for timeout
                 if self.isRecordingOn is True:
                     if time.time() > self.startTime + self.recordingDuration:
                         break
+                    
+            # Stop recording after timeout
+            if self.isRecordingOn is True:
+                self.stopRecording()
+                self.timeOffset.stopRecording = True
+                timeOffsetOn = False
+                
+                # try:
+                    
+                # except:
+                #     ...
                     
         except KeyboardInterrupt:
             # Press Ctrl+C to stop recording mode
@@ -1648,6 +1678,8 @@ class IMU:
     
     def recordIMUdata(self):
         
+        global timeOffsetOn
+        
         if self.IMUIsOn is True and self.isRecordingOn is False:
             
             # Filename
@@ -1664,11 +1696,11 @@ class IMU:
             self.startTime = time.time()
             
             # Time offset
-            if self.recordBehavior.timeOffsetOn is False:
+            if timeOffsetOn is False:
                 self.timeOffset = timeOffset(self)
                 grabTimeOffset = Thread(target = self.timeOffset.grabTimeOffset)
                 grabTimeOffset.start()
-                self.recordBehavior.timeOffsetOn = True
+                timeOffsetOn = True
                 
             # Update button
             self.recordBehavior.IMUrecordButton.config(fg = 'Black', bg = '#DC5B5B', relief = 'sunken', text = 'Recording')
@@ -1682,11 +1714,13 @@ class IMU:
         elif self.IMUIsOn is True and self.isRecordingOn is True:
             
             self.stopRecording = True
-            try:
-                self.timeOffset.stopRecording = True
-                self.recordBehavior.timeOffsetOn = False
-            except:
-                ...
+            self.timeOffset.stopRecording = True
+            timeOffsetOn = False
+            
+            # try:
+                
+            # except:
+            #     ...
                 
         elif self.IMUIsOn is False and self.isRecordingOn is False:
             
@@ -1697,6 +1731,8 @@ class IMU:
             self.recordIMUdata()
     
     def readIMU(self):
+        
+        global timeOffsetOn
         
         print("Recording IMU data...")
         
@@ -1724,7 +1760,14 @@ class IMU:
         # Close ongoing recording
         self.closeOngoingRecording()
         self.stopRecording = False
-    
+        self.timeOffset.stopRecording = True
+        timeOffsetOn = False
+        
+        # try:
+            
+        # except:
+        #     ...
+            
     def closeOngoingRecording(self):
         
         print(" ")
@@ -1827,18 +1870,18 @@ class timeOffset:
                     break
     
     def grabTimeOffset(self):
-    
+        
         while True:
             
             try:
                 timeStampOffest = self.timeServer.request('pool.ntp.org').offset
             except:
                 timeStampOffest = None
-                
+            
             # Write unix timeStamp and time offset
             timeStamp = time.time()
             self.offsetDataFile.write(str(timeStamp) + ", " + str(timeStampOffest) + '\n')
-    
+            
             # Wait for next request
             time.sleep(self.requestDelay)
             
