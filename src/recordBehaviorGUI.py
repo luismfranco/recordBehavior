@@ -430,7 +430,7 @@ class recordBehaviorGUI:
     GUI Functions
     
     """
-       
+    
     def makePath(self, *args):
         
         # Read current session info
@@ -444,6 +444,8 @@ class recordBehaviorGUI:
             self.defaultSessionInfo()
             Path(self.pathForSavingData).mkdir(parents = True, exist_ok = True)
             
+        # Update path for all classes
+        return self.pathForSavingData
             
     def defaultPath(self):
         
@@ -506,7 +508,8 @@ class recordBehaviorGUI:
         
         # Update block ID if needed
         try:
-            self.blockID = str(args[0])
+            if args[0] is True:
+                self.blockID = str(args[1])
         except:
             self.blockID = str(self.blockVar.get() or self.blockIDifEmpty)
         
@@ -865,7 +868,9 @@ class topDownCamera:
         
         # New folder if blockID was changed
         if self.blockIDchanged is True:
-            self.recordBehavior.makePath(self.blockID)
+            self.pathForSavingData = self.recordBehavior.makePath(True, self.blockID)
+            self.videoFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "topDownCamera" + "_" + str(self.blockID) + ".mp4"
+            self.timeStampsFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "topDownCameraTimeStamps" + "_" + str(self.blockID) + ".txt"
             
     def prepareFiles(self):
         
@@ -1239,7 +1244,9 @@ class eyeCamera:
                 
         # New folder if blockID was changed
         if self.blockIDchanged is True:
-            self.recordBehavior.makePath(self.blockID)
+            self.pathForSavingData = self.recordBehavior.makePath(True, self.blockID)
+            self.videoFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "eyeCamera" + "_" + str(self.blockID) + ".mp4"
+            self.timeStampsFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "eyeCameraTimeStamps" + "_" + str(self.blockID) + ".txt"
         
     def prepareFiles(self):
         
@@ -1681,7 +1688,8 @@ class IMU:
         
         # New folder if blockID was changed
         if self.blockIDchanged is True:
-            self.recordBehavior.makePath(self.blockID)
+            self.pathForSavingData = self.recordBehavior.makePath(True, self.blockID)
+            self.IMUdataFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "IMUdata" + "_" + str(self.blockID) + ".txt"
     
     def recordIMUdata(self):
         
