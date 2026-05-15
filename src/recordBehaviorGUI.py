@@ -970,13 +970,11 @@ class topDownCamera:
         elif self.isRecordingOn is True:
             
             self.stopRecording()
-            self.timeOffset.stopRecording = True
-            timeOffsetOn = False
-            
-            # try:
-                
-            # except:
-            #     ...
+            try:
+                self.timeOffset.stopRecording = True
+                timeOffsetOn = False
+            except:
+                ...
                 
         elif self.isPreviewOn is True:
             print("Preview mode is on... Please close preview mode before starting a recording.")
@@ -1056,13 +1054,11 @@ class topDownCamera:
             # Stop recording after timeout
             if self.isRecordingOn is True:
                 self.stopRecording()
-                self.timeOffset.stopRecording = True
-                timeOffsetOn = False
-                
-                # try:
-                    
-                # except:
-                #     ...
+                try:
+                    self.timeOffset.stopRecording = True
+                    timeOffsetOn = False
+                except:
+                    ...
                     
         except ic4.IC4Exception as e:
             print(f"Error during acquisition: {e}")
@@ -1352,13 +1348,11 @@ class eyeCamera:
         elif self.isRecordingOn is True:
             
             self.stopRecording()
-            self.timeOffset.stopRecording = True
-            timeOffsetOn = False
-            
-            # try:
-                
-            # except:
-            #     ...
+            try:
+                self.timeOffset.stopRecording = True
+                timeOffsetOn = False
+            except:
+                ...
                 
         elif self.isPreviewOn is True:
             print("Preview mode is on... Please close preview mode before starting a recording.")
@@ -1434,13 +1428,11 @@ class eyeCamera:
             # Stop recording after timeout
             if self.isRecordingOn is True:
                 self.stopRecording()
-                self.timeOffset.stopRecording = True
-                timeOffsetOn = False
-                
-                # try:
-                    
-                # except:
-                #     ...
+                try:
+                    self.timeOffset.stopRecording = True
+                    timeOffsetOn = False
+                except:
+                    ...
                     
         except KeyboardInterrupt:
             # Press Ctrl+C to stop recording mode
@@ -1714,13 +1706,11 @@ class IMU:
         elif self.IMUIsOn is True and self.isRecordingOn is True:
             
             self.stopRecording = True
-            self.timeOffset.stopRecording = True
-            timeOffsetOn = False
-            
-            # try:
-                
-            # except:
-            #     ...
+            try:
+                self.timeOffset.stopRecording = True
+                timeOffsetOn = False
+            except:
+                ...
                 
         elif self.IMUIsOn is False and self.isRecordingOn is False:
             
@@ -1760,13 +1750,11 @@ class IMU:
         # Close ongoing recording
         self.closeOngoingRecording()
         self.stopRecording = False
-        self.timeOffset.stopRecording = True
-        timeOffsetOn = False
-        
-        # try:
-            
-        # except:
-        #     ...
+        try:
+            self.timeOffset.stopRecording = True
+            timeOffsetOn = False
+        except:
+            ...
             
     def closeOngoingRecording(self):
         
