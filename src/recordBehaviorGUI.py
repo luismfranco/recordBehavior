@@ -502,12 +502,13 @@ class recordBehaviorGUI:
         self.userID = str(self.userVar.get() or self.userIDifEmpty)
         self.rigID = str(self.rigVar.get() or self.rigIDifEmpty)
         self.animalID = str(self.animalVar.get() or self.animalIDifEmpty)
-        self.blockID = str(self.blockVar.get() or self.blockIDifEmpty)
         self.updateInfoSessionForEachTask()
         
         # Update block ID if needed
-        if args[0] is True:
-            self.blockID = str(args[1])
+        try:
+            self.blockID = str(args[0])
+        except:
+            self.blockID = str(self.blockVar.get() or self.blockIDifEmpty)
         
         # Automatically update path if not custom
         useCustomPath = bool(self.useCustomPath.get())
@@ -864,7 +865,7 @@ class topDownCamera:
         
         # New folder if blockID was changed
         if self.blockIDchanged is True:
-            self.recordBehavior.makePath(True, self.blockID)
+            self.recordBehavior.makePath(self.blockID)
             
     def prepareFiles(self):
         
@@ -1238,7 +1239,7 @@ class eyeCamera:
                 
         # New folder if blockID was changed
         if self.blockIDchanged is True:
-            self.recordBehavior.makePath(True, self.blockID)
+            self.recordBehavior.makePath(self.blockID)
         
     def prepareFiles(self):
         
@@ -1680,7 +1681,7 @@ class IMU:
         
         # New folder if blockID was changed
         if self.blockIDchanged is True:
-            self.recordBehavior.makePath(True, self.blockID)
+            self.recordBehavior.makePath(self.blockID)
     
     def recordIMUdata(self):
         
