@@ -25,6 +25,9 @@ import serial
 import ntplib
 timeOffsetOn = False
 
+# Update folder
+folderUpdated = False
+
 
 """
 Application
@@ -433,6 +436,8 @@ class recordBehaviorGUI:
     
     def makePath(self, *args):
         
+        global folderUpdated
+        
         # Read current session info
         self.updatePath(*args)
         
@@ -445,7 +450,7 @@ class recordBehaviorGUI:
             Path(self.pathForSavingData).mkdir(parents = True, exist_ok = True)
             
         # Update path for all classes
-        return self.pathForSavingData
+        return self.pathForSavingData, folderUpdated
             
     def defaultPath(self):
         
@@ -500,18 +505,23 @@ class recordBehaviorGUI:
         
     def updatePath(self, *args):
         
+        global folderUpdated
+        
         # Update session info
         self.userID = str(self.userVar.get() or self.userIDifEmpty)
         self.rigID = str(self.rigVar.get() or self.rigIDifEmpty)
         self.animalID = str(self.animalVar.get() or self.animalIDifEmpty)
+        self.blockID = str(self.blockVar.get() or self.blockIDifEmpty)
         self.updateInfoSessionForEachTask()
         
         # Update block ID if needed
         try:
             if args[0] is True:
                 self.blockID = str(args[1])
+                self.blockVar.set(self.blockID)
+                folderUpdated = True
         except:
-            self.blockID = str(self.blockVar.get() or self.blockIDifEmpty)
+            ...
         
         # Automatically update path if not custom
         useCustomPath = bool(self.useCustomPath.get())
@@ -947,7 +957,7 @@ class topDownCamera:
             self.initializeCamera()
             
             # Prepare files for recording
-            self.recordBehavior.makePath()
+            _, self.blockIDchanged = self.recordBehavior.makePath()
             self.checkFileNames()
             self.prepareFiles()
             
@@ -1012,7 +1022,7 @@ class topDownCamera:
         
         if self.blockIDchanged is True:
         
-            messagebox.showwarning("Data Saved", "Video and time stamps have been saved at " + self.pathForSavingData +
+            messagebox.showwarning("Data Saved", "TopDown camera video and time stamps have been saved at " + self.pathForSavingData +
                                    "\n " +
                                    "\nHowever, the block number was changed to " + str(self.blockID) + " to avoid overwriting an existing file." +
                                    "\n"
@@ -1331,7 +1341,7 @@ class eyeCamera:
             if self.isCameraAvailable is True:
                 
                 # Prepare files for recording
-                self.recordBehavior.makePath()
+                _, self.blockIDchanged = self.recordBehavior.makePath()
                 self.checkFileNames()
                 self.prepareFiles()
                 
@@ -1396,7 +1406,7 @@ class eyeCamera:
         
         if self.blockIDchanged is True:
         
-            messagebox.showwarning("Data Saved", "Video and time stamps have been saved at " + self.pathForSavingData +
+            messagebox.showwarning("Data Saved", "Eye camera video and time stamps have been saved at " + self.pathForSavingData +
                                    "\n " +
                                    "\nHowever, the block number was changed to " + str(self.blockID) + " to avoid overwriting an existing file." +
                                    "\n"
@@ -1698,7 +1708,7 @@ class IMU:
         if self.IMUIsOn is True and self.isRecordingOn is False:
             
             # Filename
-            self.recordBehavior.makePath()
+            _, self.blockIDchanged = self.recordBehavior.makePath()
             self.checkFileName()
             
             # Prepare files for recording
