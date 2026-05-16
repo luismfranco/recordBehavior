@@ -456,9 +456,15 @@ class recordBehaviorGUI:
             folderUpdated = False
             classesKnow = [False, False, False]
         
-        
         # Update path for all classes
         return self.pathForSavingData, folderUpdated, self.blockID
+    
+    def resetFolderBoolean(self):
+        
+        global folderUpdated
+        
+        if folderUpdated is True:
+            folderUpdated = False
     
     def defaultPath(self):
         
@@ -896,7 +902,10 @@ class topDownCamera:
             # self.pathForSavingData, self.blockIDchanged, self.blockID = self.recordBehavior.makePath(True, self.blockID)
             self.videoFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "topDownCamera" + "_" + str(self.blockID) + ".mp4"
             self.timeStampsFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "topDownCameraTimeStamps" + "_" + str(self.blockID) + ".txt"
-            
+        
+        # If new folder was created
+        if folderUpdated is True:
+            self.blockIDchanged = True
             
     def prepareFiles(self):
         
@@ -1045,6 +1054,10 @@ class topDownCamera:
                                    "\nHowever, the block number was changed to " + str(self.blockID) + " to avoid overwriting an existing file." +
                                    "\n"
                                    "\nIf other data was acquired, make sure block numbers match.")
+            self.blockIDchanged = False
+            
+            # Reset folder boolean
+            self.recordBehavior.resetFolderBoolean()
 
     def grabFrame(self):
         
@@ -1281,6 +1294,10 @@ class eyeCamera:
             self.videoFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "eyeCamera" + "_" + str(self.blockID) + ".mp4"
             self.timeStampsFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "eyeCameraTimeStamps" + "_" + str(self.blockID) + ".txt"
                 
+        # If new folder was created
+        if folderUpdated is True:
+            self.blockIDchanged = True
+            
     def prepareFiles(self):
         
         # Define the codec and create VideoWriter object        
@@ -1436,7 +1453,11 @@ class eyeCamera:
                                    "\nHowever, the block number was changed to " + str(self.blockID) + " to avoid overwriting an existing file." +
                                    "\n"
                                    "\nIf other data was acquired, make sure block numbers match.")
-
+            self.blockIDchanged = False
+            
+            # Reset folder boolean
+            self.recordBehavior.resetFolderBoolean()
+            
     def grabFrame(self):
         
         global timeOffsetOn
@@ -1731,6 +1752,10 @@ class IMU:
             # self.pathForSavingData, self.blockIDchanged, self.blockID = self.recordBehavior.makePath(True, self.blockID)
             self.IMUdataFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "IMUdata" + "_" + str(self.blockID) + ".txt"
             print(self.IMUdataFileName)
+        
+        # If new folder was created
+        if folderUpdated is True:
+            self.blockIDchanged = True
             
     def recordIMUdata(self):
         
@@ -1849,6 +1874,9 @@ class IMU:
                                    "\nIf other data was acquired, make sure block numbers match.")
             self.blockIDchanged = False
         
+            # Reset folder boolean
+            self.recordBehavior.resetFolderBoolean()
+            
         # Close IMU connection too if recording is finished
         if time.time() > self.startTime + self.recordingDuration:
             self.closeIMUconnection()
@@ -1928,7 +1956,11 @@ class timeOffset:
                 if not os.path.isfile(self.offsetDataFileName):
                     self.blockIDchanged = True
                     break
-    
+        
+        # If new folder was created
+        if folderUpdated is True:
+            self.blockIDchanged = True
+            
     def grabTimeOffset(self):
         
         while True:
@@ -1952,7 +1984,7 @@ class timeOffset:
             # Check for manual stop
             if self.stopRecording is True:
                 break
-            
+        
         # Stop time offset acquisition
         self.stopTimeOffset()
             
@@ -1971,6 +2003,8 @@ class timeOffset:
                                    "\nIf other data was acquired, make sure block numbers match.")
             self.blockIDchanged = False
             
+            # Reset folder boolean
+            self.recordBehavior.resetFolderBoolean()
             
 """
 Main Block
