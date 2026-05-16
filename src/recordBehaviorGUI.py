@@ -27,6 +27,7 @@ timeOffsetOn = False
 
 # Update folder
 folderUpdated = False
+classesKnow = [False, False, False]
 
 
 """
@@ -436,7 +437,7 @@ class recordBehaviorGUI:
     
     def makePath(self, *args):
         
-        global folderUpdated
+        global folderUpdated, classesKnow
         
         # Read current session info
         self.updatePath(*args)
@@ -452,6 +453,11 @@ class recordBehaviorGUI:
         # Update path for all classes
         return self.pathForSavingData, folderUpdated
             
+        # Reset 
+        if all(classesKnow) is True:
+            folderUpdated = False
+            classesKnow = [False, False, False]
+    
     def defaultPath(self):
         
         try:
@@ -881,6 +887,8 @@ class topDownCamera:
             self.pathForSavingData, _ = self.recordBehavior.makePath(True, self.blockID)
             self.videoFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "topDownCamera" + "_" + str(self.blockID) + ".mp4"
             self.timeStampsFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "topDownCameraTimeStamps" + "_" + str(self.blockID) + ".txt"
+            global classesKnow
+            classesKnow[0] = True
             
     def prepareFiles(self):
         
@@ -958,6 +966,9 @@ class topDownCamera:
             
             # Prepare files for recording
             _, self.blockIDchanged = self.recordBehavior.makePath()
+            if self.blockIDchanged is True:
+                global classesKnow
+                classesKnow[0] = True
             self.checkFileNames()
             self.prepareFiles()
             
@@ -1257,7 +1268,9 @@ class eyeCamera:
             self.pathForSavingData, _ = self.recordBehavior.makePath(True, self.blockID)
             self.videoFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "eyeCamera" + "_" + str(self.blockID) + ".mp4"
             self.timeStampsFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "eyeCameraTimeStamps" + "_" + str(self.blockID) + ".txt"
-        
+            global classesKnow
+            classesKnow[1] = True
+                
     def prepareFiles(self):
         
         # Define the codec and create VideoWriter object        
@@ -1342,6 +1355,9 @@ class eyeCamera:
                 
                 # Prepare files for recording
                 _, self.blockIDchanged = self.recordBehavior.makePath()
+                if self.blockIDchanged is True:
+                    global classesKnow
+                    classesKnow[1] = True
                 self.checkFileNames()
                 self.prepareFiles()
                 
@@ -1700,7 +1716,9 @@ class IMU:
         if self.blockIDchanged is True:
             self.pathForSavingData, _ = self.recordBehavior.makePath(True, self.blockID)
             self.IMUdataFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "IMUdata" + "_" + str(self.blockID) + ".txt"
-    
+            global classesKnow
+            classesKnow[2] = True
+            
     def recordIMUdata(self):
         
         global timeOffsetOn
@@ -1709,6 +1727,8 @@ class IMU:
             
             # Filename
             _, self.blockIDchanged = self.recordBehavior.makePath()
+            global classesKnow
+            classesKnow[2] = True
             self.checkFileName()
             
             # Prepare files for recording
