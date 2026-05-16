@@ -1719,6 +1719,7 @@ class IMU:
             self.IMUdataFileName = self.pathForSavingData + self.animalID + "_" + self.currentDate + "_" + "IMUdata" + "_" + str(self.blockID) + ".txt"
             global classesKnow
             classesKnow[2] = True
+            print(self.IMUdataFileName)
             
     def recordIMUdata(self):
         
@@ -1728,8 +1729,9 @@ class IMU:
             
             # Filename
             self.pathForSavingData, self.blockIDchanged, self.blockID = self.recordBehavior.makePath()
-            global classesKnow
-            classesKnow[2] = True
+            if self.blockIDchanged is True:
+                global classesKnow
+                classesKnow[2] = True
             self.checkFileName()
             
             # Prepare files for recording
